@@ -8,7 +8,7 @@ tools:context=".MainActivity">
 
 <item
     android:id="@+id/action_scan"
-    android:showAsAction="ifRoom"
+    app:showAsAction="ifRoom"
     android:title="@string/scan"
     />
 

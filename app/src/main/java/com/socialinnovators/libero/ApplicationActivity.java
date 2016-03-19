@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
@@ -23,14 +26,10 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
-import java.net.URISyntaxException;
-
-import com.github.nkzawa.socketio.client.IO;
-import com.github.nkzawa.socketio.client.Socket;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.github.nkzawa.emitter.Emitter;
+
+import java.net.URISyntaxException;
 
 public class ApplicationActivity extends AppCompatActivity {
 
@@ -101,16 +100,17 @@ public class ApplicationActivity extends AppCompatActivity {
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
 
+
             if (STATE == "down" && yaw-previous > 40 && running) {
                 count++;
                 //mSocket.emit("msg", count + ":" + myo.getName());
                 myo.vibrate(Myo.VibrationType.LONG);
             }
 
-            if (yaw-previous > 40) {
+            if (yaw-previous > max) {
                 STATE = "up";
             }
-            else if (yaw-previous < -40) {
+            else if (yaw-previous < min) {
                 STATE = "down";
             }
 
