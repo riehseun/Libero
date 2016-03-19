@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
-                android:id="@+id/instructionview" />
+                android:id="@+id/progressview" />
         </FrameLayout>
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Large Text"
-                android:id="@+id/progressview" />
+                android:id="@+id/progressviea" />
         </FrameLayout>
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

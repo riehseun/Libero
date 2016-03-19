@@ -102,7 +102,7 @@ public class ApplicationActivity extends AppCompatActivity {
             mTextView.setRotation(roll);
             mTextView.setRotationX(pitch);
             mTextView.setRotationY(yaw);
-            mTextView.setText(count);
+            mTextView.setText(Integer.toString(count));
             Log.d("Yaw", Float.toString(yaw));
             Log.d("Count", Integer.toString(count));
             Log.d("Running", Boolean.toString(running));
