@@ -45,14 +45,12 @@ public class ApplicationActivity extends AppCompatActivity {
     private int count = 0;
     private boolean running = false;
     private String STATE;
-    private float previous;
-    private float max = 100;
-    private float min =  -100;
+    private final float max = 100;
+    private final float min =  -100;
 
-    private static List<String> yaws = new ArrayList<String>();
-    private static List<String> pitches = new ArrayList<String>();
-    private static List<String> rolls = new ArrayList<String>();
-    private static List<Integer> counts = new ArrayList<Integer>();
+    private static List<String> yaws = new ArrayList<>();
+    private static List<String> pitches = new ArrayList<>();
+    private static List<String> rolls = new ArrayList<>();
 
     private Socket mSocket;
     {
@@ -66,35 +64,6 @@ public class ApplicationActivity extends AppCompatActivity {
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
-
-        // onConnect() is called whenever a Myo has been connected.
-//        @Override
-//        public void onConnect(Myo myo, long timestamp) {
-//            // Set the text color of the text view to cyan when a Myo connects.
-//            mTextView.setTextColor(Color.CYAN);
-//        }
-//
-//        // onDisconnect() is called whenever a Myo has been disconnected.
-//        @Override
-//        public void onDisconnect(Myo myo, long timestamp) {
-//            // Set the text color of the text view to red when a Myo disconnects.
-//            mTextView.setTextColor(Color.RED);
-//        }
-
-        // onArmSync() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
-        // arm. This lets Myo know which arm it's on and which way it's facing.
-        @Override
-        public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
-            mTextView.setText(myo.getArm() == Arm.LEFT ? R.string.arm_left : R.string.arm_right);
-        }
-
-        // onArmUnsync() is called whenever Myo has detected that it was moved from a stable position on a person's arm after
-        // it recognized the arm. Typically this happens when someone takes Myo off of their arm, but it can also happen
-        // when Myo is moved around on the arm.
-        @Override
-        public void onArmUnsync(Myo myo, long timestamp) {
-            mTextView.setText(R.string.hello_world);
-        }
 
         // onOrientationData() is called whenever a Myo provides its current orientation,
         // represented as a quaternion.
@@ -124,23 +93,11 @@ public class ApplicationActivity extends AppCompatActivity {
                 pitch *= -1;
             }
 
-            // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
-//            mTextView.setRotation(roll);
-//            mTextView.setRotationX(pitch);
-//            mTextView.setRotationY(yaw);
             mTextView.setText(Integer.toString(count));
 
             yaws.add(Float.toString(yaw));
             pitches.add(Float.toString(pitch));
             rolls.add(Float.toString(roll));
-            counts.add(count);
-            /*
-            Log.d("Yaw", Float.toString(yaw));
-            Log.d("Pitch", Float.toString(pitch));
-            Log.d("roll", Float.toString(roll));
-            Log.d("Count", Integer.toString(count));
-            Log.d("Running", Boolean.toString(running));
-            */
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -167,10 +124,15 @@ public class ApplicationActivity extends AppCompatActivity {
                     break;
                 case FIST:
                     mTextView.setText(getString(R.string.pose_fist));
-                    System.out.println(yaws);
-                    System.out.println(rolls);
-                    System.out.println(pitches);
-                    System.out.println(counts);
+                    for (String a : yaws) {
+                       System.out.println(a);
+                    }
+                    for (String b : pitches) {
+                        System.out.println(b);
+                    }
+                    for (String c : rolls) {
+                        System.out.println(c);
+                    }
                     running = false;
                     break;
                 case WAVE_IN:
