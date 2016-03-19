@@ -40,6 +40,8 @@ public class ApplicationActivity extends AppCompatActivity {
 
     private TextView mTextView;
     private TextView minTimer;
+    private TextView minTimerSecs;
+    private TextView counterView;
     private ViewFlipper viewFlipper;
 
     private int count = 0;
@@ -64,6 +66,7 @@ public class ApplicationActivity extends AppCompatActivity {
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
+
 
         // onOrientationData() is called whenever a Myo provides its current orientation,
         // represented as a quaternion.
@@ -93,7 +96,12 @@ public class ApplicationActivity extends AppCompatActivity {
                 pitch *= -1;
             }
 
-            mTextView.setText(Integer.toString(count));
+
+            // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
+//            mTextView.setRotation(roll);
+//            mTextView.setRotationX(pitch);
+//            mTextView.setRotationY(yaw);
+            counterView.setText(Integer.toString(count));
 
             yaws.add(Float.toString(yaw));
             pitches.add(Float.toString(pitch));
@@ -107,7 +115,6 @@ public class ApplicationActivity extends AppCompatActivity {
             // based on the pose we receive.
             switch (pose) {
                 case UNKNOWN:
-                    mTextView.setText(getString(R.string.hello_world));
                     break;
                 case REST:
                 case DOUBLE_TAP:
@@ -120,26 +127,21 @@ public class ApplicationActivity extends AppCompatActivity {
                             restTextId = R.string.arm_right;
                             break;
                     }
-                    mTextView.setText(getString(restTextId));
+
                     break;
                 case FIST:
-                    mTextView.setText(getString(R.string.pose_fist));
-                    for (String a : yaws) {
-                       System.out.println(a);
-                    }
-                    for (String b : pitches) {
-                        System.out.println(b);
-                    }
-                    for (String c : rolls) {
-                        System.out.println(c);
-                    }
+
+                    System.out.println(yaws);
+                    System.out.println(rolls);
+                    System.out.println(pitches);
+                    System.out.println(count);
                     running = false;
                     break;
                 case WAVE_IN:
-                    mTextView.setText(getString(R.string.pose_wavein));
+
                     break;
                 case WAVE_OUT:
-                    mTextView.setText(getString(R.string.pose_waveout));
+
                     break;
                 case FINGERS_SPREAD:
                     if(viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(findViewById(R.id.instruction))) {
@@ -161,7 +163,7 @@ public class ApplicationActivity extends AppCompatActivity {
             } else {
                 // Tell the Myo to stay unlocked only for a short period. This allows the Myo to
                 // stay unlocked while poses are being performed, but lock after inactivity.
-                myo.unlock(Myo.UnlockType.TIMED);
+                myo.unlock(Myo.UnlockType.HOLD);
             }
         }
     };
@@ -177,8 +179,8 @@ public class ApplicationActivity extends AppCompatActivity {
         mSocket.connect();
 
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
-        mTextView = (TextView) findViewById(R.id.progressview);
-
+        counterView = (TextView) findViewById(R.id.progressview);
+        minTimerSecs = (TextView) findViewById(R.id.minTimerSecs);
         // First, we initialize the Hub singleton with an application identifier.
         Hub hub = Hub.getInstance();
         if (!hub.init(this, getPackageName())) {
@@ -271,6 +273,7 @@ public class ApplicationActivity extends AppCompatActivity {
     }
 
 
+
     public void GetStarted(View view) {
         viewFlipper.showNext();
 
@@ -281,10 +284,13 @@ public class ApplicationActivity extends AppCompatActivity {
 
         new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
-                minTimer.setText("Seconds remaining: " + millisUntilFinished / 1000);
+                minTimer.setText("Seconds remaining: ");
+                minTimerSecs.setText(Long.toString(millisUntilFinished/1000));
             }
             public void onFinish() {
                 minTimer.setText("Done!");
+                minTimerSecs.setText(null);
+                viewFlipper.showNext();
             }
 
         }.start();

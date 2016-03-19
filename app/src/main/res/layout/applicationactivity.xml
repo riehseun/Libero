@@ -85,6 +85,7 @@
                 android:src="@drawable/hand" />
         </FrameLayout>
 
+
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
@@ -102,27 +103,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Time starts now"
-                android:id="@+id/minTimer" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Number of Pushups:"
                 android:id="@+id/textView"
-                android:layout_gravity="left|center_vertical" />
+                android:layout_gravity="left|center_vertical"
+                android:textSize="25dp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="37dp"
+                android:layout_width="326dp"
+                android:layout_height="56dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Time starts now"
+                android:text="Time starts now:"
+                android:id="@+id/minTimer"
+                android:layout_gravity="left|top"
+                android:textSize="25dp" />
+
+            <TextView
+                android:layout_width="301dp"
+                android:layout_height="174dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/progressview"
-                android:layout_gravity="right|center_vertical" />
+                android:layout_gravity="left|bottom"
+                android:background="#d7eecf"
+                android:elegantTextHeight="true"
+                android:textSize="50dp"
+                android:textColor="#e12e64"
+                android:gravity="center" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="269dp"
+                    android:layout_height="205dp"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/minTimerSecs"
+                    android:layout_gravity="center_horizontal|top"
+                    android:textSize="50dp"
+                    android:gravity="center"
+                    android:textColor="#ba68c8"
+                    android:singleLine="false" />
+            </LinearLayout>
 
         </FrameLayout>
-
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
