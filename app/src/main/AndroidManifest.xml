@@ -14,7 +14,7 @@
         android:theme="@style/MyMaterialTheme.Base">
 
         <activity android:name=".ApplicationActivity"
-            android:label="Connect your Myo ->">
+            android:label="Libero">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
