@@ -1,17 +1,20 @@
 package com.socialinnovators.libero;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
+import android.os.CountDownTimer;
+import android.view.MotionEvent;
 import android.widget.ViewFlipper;
+import android.support.v7.app.AppCompatActivity;
 
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
@@ -27,6 +30,7 @@ public class ApplicationActivity extends AppCompatActivity {
 
 
     private TextView mTextView;
+    private TextView minTimer;
     private ViewFlipper viewFlipper;
 
 
@@ -143,6 +147,7 @@ public class ApplicationActivity extends AppCompatActivity {
                     mTextView.setText(getString(R.string.pose_fingersspread));
                     myo.vibrate(Myo.VibrationType.LONG);
                     running = true;
+
                     break;
             }
 
@@ -167,7 +172,6 @@ public class ApplicationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applicationactivity);
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
-
         mTextView = (TextView) findViewById(R.id.progressview);
 
         // First, we initialize the Hub singleton with an application identifier.
@@ -224,7 +228,7 @@ public class ApplicationActivity extends AppCompatActivity {
 
 
     public void GetStarted(View view) {
-            viewFlipper.showNext();
+        viewFlipper.showNext();
 
     }
 
@@ -234,5 +238,17 @@ public class ApplicationActivity extends AppCompatActivity {
 
     }
 
+    private void countdown() {
+        minTimer=(TextView)findViewById(R.id.minTimer);
 
+        new CountDownTimer(60000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                minTimer.setText("Seconds remaining: " + millisUntilFinished / 1000);
+            }
+            public void onFinish() {
+                minTimer.setText("Done!");
+            }
+
+        }.start();
+    }
 }
