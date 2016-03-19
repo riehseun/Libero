@@ -10,6 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View;
+import android.view.MotionEvent;
+import android.widget.ViewFlipper;
 
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
@@ -23,8 +26,10 @@ import com.thalmic.myo.scanner.ScanActivity;
 
 public class ApplicationActivity extends Activity {
 
-    private TextView mLockStateView;
+
     private TextView mTextView;
+    private ViewFlipper viewFlipper;
+
 
     private int count;
     private boolean running = false;
@@ -63,19 +68,7 @@ public class ApplicationActivity extends Activity {
             mTextView.setText(R.string.hello_world);
         }
 
-        // onUnlock() is called whenever a synced Myo has been unlocked. Under the standard locking
-        // policy, that means poses will now be delivered to the listener.
-        @Override
-        public void onUnlock(Myo myo, long timestamp) {
-            mLockStateView.setText(R.string.unlocked);
-        }
 
-        // onLock() is called whenever a synced Myo has been locked. Under the standard locking
-        // policy, that means poses will no longer be delivered to the listener.
-        @Override
-        public void onLock(Myo myo, long timestamp) {
-            mLockStateView.setText(R.string.locked);
-        }
 
         // onOrientationData() is called whenever a Myo provides its current orientation,
         // represented as a quaternion.
@@ -86,7 +79,7 @@ public class ApplicationActivity extends Activity {
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
-            if (STATE == "down" && yaw > 110 && running == true) {
+            if (STATE == "down" && yaw > 110 && running) {
                 count++;
                 myo.vibrate(Myo.VibrationType.LONG);
             }
@@ -173,8 +166,8 @@ public class ApplicationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applicationactivity);
+        viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
 
-        mLockStateView = (TextView) findViewById(R.id.lock_state);
         mTextView = (TextView) findViewById(R.id.text);
 
         // First, we initialize the Hub singleton with an application identifier.
@@ -228,4 +221,14 @@ public class ApplicationActivity extends Activity {
         Intent intent = new Intent(this, ScanActivity.class);
         startActivity(intent);
     }
+
+
+    public void GetStarted(View view) {
+
+        viewFlipper.showNext();
+
+    }
+
+
+
 }

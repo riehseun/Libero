@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.socialinnovators.libero"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName '0.0.1'
@@ -28,6 +28,7 @@ dependencies {
         maven {
             url 'myo-sdk/myorepository'
         }
+        compile 'com.android.support:appcompat-v7:21.0.3'
     }
     compile('com.thalmic:myosdk:0.10.+@aar')
 
