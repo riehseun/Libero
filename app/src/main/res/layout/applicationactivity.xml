@@ -19,7 +19,8 @@
     <ViewFlipper
         android:layout_width="347dp"
         android:layout_height="match_parent"
-        android:id="@+id/viewflipper">
+        android:id="@+id/viewflipper"
+        android:background="#ffffff">
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"

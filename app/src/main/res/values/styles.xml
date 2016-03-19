@@ -9,12 +9,9 @@
     </style>
 
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="MyButton">
@@ -26,5 +23,7 @@
         <item name="android:elevation">1dp</item>
         <item name="android:translationZ">1dp</item>
         <item name="android:colorButtonNormal">#2196f3</item>
+        <item name="android:colorAccent">#2196f3</item>
+        <item name="android:colorControlNormal">#2196f3</item>
     </style>
 </resources>

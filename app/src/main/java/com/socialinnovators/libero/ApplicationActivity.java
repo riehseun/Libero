@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.view.View;
 import android.view.MotionEvent;
 import android.widget.ViewFlipper;
+import android.support.v7.app.AppCompatActivity;
 
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
@@ -24,7 +25,7 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
-public class ApplicationActivity extends Activity {
+public class ApplicationActivity extends AppCompatActivity {
 
 
     private TextView mTextView;
