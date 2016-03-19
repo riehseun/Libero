@@ -27,7 +27,8 @@ public class ApplicationActivity extends Activity {
     private TextView mTextView;
 
     private int count;
-    private String STATE ;
+    private boolean running = false;
+    private String STATE;
 
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
@@ -85,8 +86,9 @@ public class ApplicationActivity extends Activity {
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
-            if (STATE == "down" && yaw > 110) {
+            if (STATE == "down" && yaw > 110 && running == true) {
                 count++;
+                myo.vibrate(Myo.VibrationType.LONG);
             }
 
             if (yaw > 110) {
@@ -109,6 +111,7 @@ public class ApplicationActivity extends Activity {
 
             Log.d("Yaw", Float.toString(yaw));
             Log.d("Count", Integer.toString(count));
+            Log.d("Running", Boolean.toString(running));
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -135,6 +138,7 @@ public class ApplicationActivity extends Activity {
                     break;
                 case FIST:
                     mTextView.setText(getString(R.string.pose_fist));
+                    running = false;
                     break;
                 case WAVE_IN:
                     mTextView.setText(getString(R.string.pose_wavein));
@@ -144,6 +148,8 @@ public class ApplicationActivity extends Activity {
                     break;
                 case FINGERS_SPREAD:
                     mTextView.setText(getString(R.string.pose_fingersspread));
+                    myo.vibrate(Myo.VibrationType.LONG);
+                    running = true;
                     break;
             }
 
