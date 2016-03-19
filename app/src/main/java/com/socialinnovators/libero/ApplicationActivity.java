@@ -1,5 +1,6 @@
 package com.socialinnovators.libero;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -29,7 +30,11 @@ import com.thalmic.myo.scanner.ScanActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationActivity extends AppCompatActivity {
 
@@ -37,12 +42,17 @@ public class ApplicationActivity extends AppCompatActivity {
     private TextView minTimer;
     private ViewFlipper viewFlipper;
 
-    private int count;
+    private int count = 0;
     private boolean running = false;
     private String STATE;
     private float previous;
     private float max = 40;
     private float min =  -40;
+
+    private static List<String> yaws = new ArrayList<String>();
+    private static List<String> pitches = new ArrayList<String>();
+    private static List<String> rolls = new ArrayList<String>();
+    private static List<Integer> counts = new ArrayList<Integer>();
 
     private Socket mSocket;
     {
@@ -86,8 +96,6 @@ public class ApplicationActivity extends AppCompatActivity {
             mTextView.setText(R.string.hello_world);
         }
 
-
-
         // onOrientationData() is called whenever a Myo provides its current orientation,
         // represented as a quaternion.
         @Override
@@ -96,8 +104,6 @@ public class ApplicationActivity extends AppCompatActivity {
             float roll = (float) Math.toDegrees(Quaternion.roll(rotation));
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
-
-
 
             if (STATE == "down" && yaw-previous > 40 && running) {
                 count++;
@@ -112,7 +118,6 @@ public class ApplicationActivity extends AppCompatActivity {
                 STATE = "down";
             }
 
-
             // Adjust roll and pitch for the orientation of the Myo on the arm.
             if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
                 roll *= -1;
@@ -125,9 +130,18 @@ public class ApplicationActivity extends AppCompatActivity {
 //            mTextView.setRotationX(pitch);
 //            mTextView.setRotationY(yaw);
             mTextView.setText(Integer.toString(count));
+
+            yaws.add(Float.toString(yaw));
+            pitches.add(Float.toString(pitch));
+            rolls.add(Float.toString(roll));
+            counts.add(count);
+            /*
             Log.d("Yaw", Float.toString(yaw));
+            Log.d("Pitch", Float.toString(pitch));
+            Log.d("roll", Float.toString(roll));
             Log.d("Count", Integer.toString(count));
             Log.d("Running", Boolean.toString(running));
+            */
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -154,6 +168,10 @@ public class ApplicationActivity extends AppCompatActivity {
                     break;
                 case FIST:
                     mTextView.setText(getString(R.string.pose_fist));
+                    System.out.println(yaws);
+                    System.out.println(rolls);
+                    System.out.println(pitches);
+                    System.out.println(counts);
                     running = false;
                     break;
                 case WAVE_IN:
@@ -294,12 +312,6 @@ public class ApplicationActivity extends AppCompatActivity {
 
     public void GetStarted(View view) {
         viewFlipper.showNext();
-
-    }
-
-    private void DisplayResults() {
-        // TODO: Display tabulated results from server
-
 
     }
 
