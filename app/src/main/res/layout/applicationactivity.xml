@@ -11,11 +11,6 @@
     android:translationZ="2dp"
     android:clickable="true">
 
-
-
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-
     <ViewFlipper
         android:layout_width="347dp"
         android:layout_height="match_parent"
@@ -44,13 +39,14 @@
                 android:elevation="6dp"
                 android:onClick="GetStarted"
                 style="@style/MyButton"
-                android:background="#48d070" />
+                android:background="#304FFE" />
 
             <ImageView
-                android:layout_width="251dp"
-                android:layout_height="251dp"
+                android:layout_width="320dp"
+                android:layout_height="320dp"
                 android:id="@+id/imageView"
-                android:layout_gravity="center"
+                android:paddingTop="32dp"
+                android:paddingRight="32dp"
                 android:src="@drawable/logo" />
 
 
@@ -66,7 +62,8 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="MainActivity"
             android:translationZ="2dp"
-            android:clickable="true">
+            android:clickable="true"
+            android:id="@+id/instruction">
 
 
             <TextView
@@ -95,7 +92,8 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="MainActivity"
             android:translationZ="2dp"
-            android:clickable="true">
+            android:clickable="true"
+            android:id="@+id/timer">
 
             <TextView
                 android:layout_width="wrap_content"

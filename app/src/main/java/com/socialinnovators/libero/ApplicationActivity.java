@@ -1,20 +1,17 @@
 package com.socialinnovators.libero;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View;
-import android.os.CountDownTimer;
-import android.view.MotionEvent;
 import android.widget.ViewFlipper;
-import android.support.v7.app.AppCompatActivity;
 
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
@@ -43,18 +40,18 @@ public class ApplicationActivity extends AppCompatActivity {
     private DeviceListener mListener = new AbstractDeviceListener() {
 
         // onConnect() is called whenever a Myo has been connected.
-        @Override
-        public void onConnect(Myo myo, long timestamp) {
-            // Set the text color of the text view to cyan when a Myo connects.
-            mTextView.setTextColor(Color.CYAN);
-        }
-
-        // onDisconnect() is called whenever a Myo has been disconnected.
-        @Override
-        public void onDisconnect(Myo myo, long timestamp) {
-            // Set the text color of the text view to red when a Myo disconnects.
-            mTextView.setTextColor(Color.RED);
-        }
+//        @Override
+//        public void onConnect(Myo myo, long timestamp) {
+//            // Set the text color of the text view to cyan when a Myo connects.
+//            mTextView.setTextColor(Color.CYAN);
+//        }
+//
+//        // onDisconnect() is called whenever a Myo has been disconnected.
+//        @Override
+//        public void onDisconnect(Myo myo, long timestamp) {
+//            // Set the text color of the text view to red when a Myo disconnects.
+//            mTextView.setTextColor(Color.RED);
+//        }
 
         // onArmSync() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
         // arm. This lets Myo know which arm it's on and which way it's facing.
@@ -101,9 +98,9 @@ public class ApplicationActivity extends AppCompatActivity {
             }
 
             // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
-            mTextView.setRotation(roll);
-            mTextView.setRotationX(pitch);
-            mTextView.setRotationY(yaw);
+//            mTextView.setRotation(roll);
+//            mTextView.setRotationX(pitch);
+//            mTextView.setRotationY(yaw);
             mTextView.setText(Integer.toString(count));
             Log.d("Yaw", Float.toString(yaw));
             Log.d("Count", Integer.toString(count));
@@ -144,10 +141,12 @@ public class ApplicationActivity extends AppCompatActivity {
                     mTextView.setText(getString(R.string.pose_waveout));
                     break;
                 case FINGERS_SPREAD:
-                    mTextView.setText(getString(R.string.pose_fingersspread));
-                    myo.vibrate(Myo.VibrationType.LONG);
-                    running = true;
-
+                    if(viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(findViewById(R.id.instruction))) {
+                        myo.vibrate(Myo.VibrationType.LONG);
+                        running = true;
+                        viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.timer)));
+                        countdown();
+                    }
                     break;
             }
 
