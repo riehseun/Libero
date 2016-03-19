@@ -23,13 +23,20 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
-public class ApplicationActivity extends AppCompatActivity {
+import java.net.URISyntaxException;
 
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.github.nkzawa.emitter.Emitter;
+
+public class ApplicationActivity extends AppCompatActivity {
 
     private TextView mTextView;
     private TextView minTimer;
     private ViewFlipper viewFlipper;
-
 
     private int count;
     private boolean running = false;
@@ -37,6 +44,18 @@ public class ApplicationActivity extends AppCompatActivity {
     private float previous;
     private float max = 40;
     private float min =  -40;
+
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket("http://52.90.242.84:3000");
+            //mSocket = IO.socket("http://chat.socket.io");
+
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
@@ -84,6 +103,7 @@ public class ApplicationActivity extends AppCompatActivity {
 
             if (STATE == "down" && yaw-previous > 40 && running) {
                 count++;
+                //mSocket.emit("msg", count + ":" + myo.getName());
                 myo.vibrate(Myo.VibrationType.LONG);
             }
 
@@ -137,10 +157,10 @@ public class ApplicationActivity extends AppCompatActivity {
                 case FIST:
                     mTextView.setText(getString(R.string.pose_fist));
                     running = false;
-
                     break;
                 case WAVE_IN:
                     mTextView.setText(getString(R.string.pose_wavein));
+                    mSocket.emit("msg", count + ":" + myo.getName());
                     break;
                 case WAVE_OUT:
                     mTextView.setText(getString(R.string.pose_waveout));
@@ -175,6 +195,12 @@ public class ApplicationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applicationactivity);
+
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.on("msg", onResponse);
+        mSocket.connect();
+
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
         mTextView = (TextView) findViewById(R.id.progressview);
 
@@ -194,9 +220,50 @@ public class ApplicationActivity extends AppCompatActivity {
         hub.addListener(mListener);
     }
 
+    private Emitter.Listener onConnectError = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Unable to connect to NodeJS server", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    };
+
+    private Emitter.Listener onResponse = new Emitter.Listener() {
+        @Override
+        public void call(final Object...args) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    JSONObject data = (JSONObject) args[0];
+                    String user;
+                    String count;
+                    try {
+                        user = data.getString("users");
+                        count = data.getString("counts");
+                    } catch (JSONException e) {
+                        return;
+                    }
+                    Log.d("user: ", user);
+                    Log.d("count: ", count);
+                    Toast.makeText(getApplicationContext(), count + ":" + user, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    };
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+        mSocket.off("msg", onResponse);
+        mSocket.disconnect();
+
         // We don't want any callbacks when the Activity is gone, so unregister the listener.
         Hub.getInstance().removeListener(mListener);
 

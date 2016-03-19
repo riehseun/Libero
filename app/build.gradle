@@ -36,4 +36,5 @@ dependencies {
     compile 'com.android.support:support-v13:+'
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.github.nkzawa:socket.io-client:0.3.0'
 }
