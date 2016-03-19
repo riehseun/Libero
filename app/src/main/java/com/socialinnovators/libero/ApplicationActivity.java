@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +25,9 @@ public class ApplicationActivity extends Activity {
 
     private TextView mLockStateView;
     private TextView mTextView;
+
+    private int count;
+    private String STATE ;
 
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
@@ -81,6 +85,17 @@ public class ApplicationActivity extends Activity {
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
+            if (STATE == "down" && yaw > 110) {
+                count++;
+            }
+
+            if (yaw > 110) {
+                STATE = "up";
+            }
+            else if (yaw < -110) {
+                STATE = "down";
+            }
+
             // Adjust roll and pitch for the orientation of the Myo on the arm.
             if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
                 roll *= -1;
@@ -91,6 +106,9 @@ public class ApplicationActivity extends Activity {
             mTextView.setRotation(roll);
             mTextView.setRotationX(pitch);
             mTextView.setRotationY(yaw);
+
+            Log.d("Yaw", Float.toString(yaw));
+            Log.d("Count", Integer.toString(count));
         }
 
         // onPose() is called whenever a Myo provides a new pose.
