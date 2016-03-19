@@ -34,7 +34,9 @@ public class ApplicationActivity extends AppCompatActivity {
     private int count;
     private boolean running = false;
     private String STATE;
-
+    private float previous;
+    private float max = 40;
+    private float min =  -40;
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
@@ -79,17 +81,19 @@ public class ApplicationActivity extends AppCompatActivity {
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
-            if (STATE == "down" && yaw > 110 && running) {
+
+            if (STATE == "down" && yaw-previous > 40 && running) {
                 count++;
                 myo.vibrate(Myo.VibrationType.LONG);
             }
 
-            if (yaw > 110) {
+            if (yaw-previous > 40) {
                 STATE = "up";
             }
-            else if (yaw < -110) {
+            else if (yaw-previous < -40) {
                 STATE = "down";
             }
+
 
             // Adjust roll and pitch for the orientation of the Myo on the arm.
             if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
@@ -97,6 +101,7 @@ public class ApplicationActivity extends AppCompatActivity {
                 pitch *= -1;
             }
 
+            previous = yaw;
             // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
 //            mTextView.setRotation(roll);
 //            mTextView.setRotationX(pitch);
