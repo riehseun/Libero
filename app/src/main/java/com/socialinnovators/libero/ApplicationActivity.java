@@ -101,7 +101,7 @@ public class ApplicationActivity extends Activity {
             mTextView.setRotation(roll);
             mTextView.setRotationX(pitch);
             mTextView.setRotationY(yaw);
-
+            mTextView.setText(count);
             Log.d("Yaw", Float.toString(yaw));
             Log.d("Count", Integer.toString(count));
             Log.d("Running", Boolean.toString(running));
@@ -132,6 +132,7 @@ public class ApplicationActivity extends Activity {
                 case FIST:
                     mTextView.setText(getString(R.string.pose_fist));
                     running = false;
+
                     break;
                 case WAVE_IN:
                     mTextView.setText(getString(R.string.pose_wavein));
@@ -168,7 +169,7 @@ public class ApplicationActivity extends Activity {
         setContentView(R.layout.applicationactivity);
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
 
-        mTextView = (TextView) findViewById(R.id.text);
+        mTextView = (TextView) findViewById(R.id.progressview);
 
         // First, we initialize the Hub singleton with an application identifier.
         Hub hub = Hub.getInstance();
@@ -224,11 +225,15 @@ public class ApplicationActivity extends Activity {
 
 
     public void GetStarted(View view) {
-
-        viewFlipper.showNext();
+            viewFlipper.showNext();
 
     }
 
+    private void DisplayResults() {
+        // TODO: Display tabulated results from server
+
+
+    }
 
 
 }
