@@ -48,8 +48,6 @@ public class ApplicationActivity extends AppCompatActivity {
     {
         try {
             mSocket = IO.socket("http://52.90.242.84:3000");
-            //mSocket = IO.socket("http://chat.socket.io");
-
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -103,7 +101,7 @@ public class ApplicationActivity extends AppCompatActivity {
 
             if (STATE == "down" && yaw-previous > 40 && running) {
                 count++;
-                //mSocket.emit("msg", count + ":" + myo.getName());
+                mSocket.emit("msg", count + ":" + myo.getName());
                 myo.vibrate(Myo.VibrationType.LONG);
             }
 
@@ -160,14 +158,12 @@ public class ApplicationActivity extends AppCompatActivity {
                     break;
                 case WAVE_IN:
                     mTextView.setText(getString(R.string.pose_wavein));
-                    mSocket.emit("msg", count + ":" + myo.getName());
                     break;
                 case WAVE_OUT:
                     mTextView.setText(getString(R.string.pose_waveout));
                     break;
                 case FINGERS_SPREAD:
                     if(viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(findViewById(R.id.instruction))) {
-                        myo.vibrate(Myo.VibrationType.LONG);
                         running = true;
                         viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.timer)));
                         countdown();
@@ -247,8 +243,6 @@ public class ApplicationActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         return;
                     }
-                    Log.d("user: ", user);
-                    Log.d("count: ", count);
                     Toast.makeText(getApplicationContext(), count + ":" + user, Toast.LENGTH_LONG).show();
                 }
             });
