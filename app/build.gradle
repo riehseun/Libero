@@ -6,21 +6,33 @@ android {
 
     defaultConfig {
         applicationId "com.socialinnovators.libero"
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion 18
+        targetSdkVersion 22
         versionCode 1
-        versionName "1.0"
+        versionName '0.0.1'
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        debug {
+            debuggable true
+        }
     }
 }
 
 dependencies {
+    repositories {
+        maven {
+            url 'myo-sdk/myorepository'
+        }
+    }
+    compile('com.thalmic:myosdk:0.10.+@aar')
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:support-v13:+'
+    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:recyclerview-v7:+'
 }
