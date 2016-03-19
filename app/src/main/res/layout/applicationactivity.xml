@@ -72,15 +72,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Open hand wide to indicate that you are ready"
+                android:text="Large Text"
                 android:id="@+id/instructionview" />
-
-            <ImageView
-                android:layout_width="251dp"
-                android:layout_height="251dp"
-                android:id="@+id/imageView2"
-                android:layout_gravity="center"
-                android:src="@drawable/hand" />
         </FrameLayout>
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -95,20 +88,13 @@
             android:translationZ="2dp"
             android:clickable="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Time starts now"
-                android:id="@+id/minTimer" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Time starts now"
+                android:text="Large Text"
                 android:id="@+id/progressview" />
-
         </FrameLayout>
 
         <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
