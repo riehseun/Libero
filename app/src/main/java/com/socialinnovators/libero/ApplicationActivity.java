@@ -100,7 +100,8 @@ public class ApplicationActivity extends AppCompatActivity {
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
 
-            if (STATE == "down" && yaw-previous > max && running) {
+
+            if (STATE == "down" && yaw-previous > 40 && running) {
                 count++;
                 //mSocket.emit("msg", count + ":" + myo.getName());
                 myo.vibrate(Myo.VibrationType.LONG);

@@ -39,7 +39,10 @@
                 android:elevation="6dp"
                 android:onClick="GetStarted"
                 style="@style/MyButton"
-                android:background="#304FFE" />
+                android:background="#48db77"
+                android:elegantTextHeight="true"
+                android:translationZ="6dp"
+                android:textColor="#fcfffd" />
 
             <ImageView
                 android:layout_width="320dp"
