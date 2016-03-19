@@ -46,8 +46,8 @@ public class ApplicationActivity extends AppCompatActivity {
     private boolean running = false;
     private String STATE;
     private float previous;
-    private float max = 40;
-    private float min =  -40;
+    private float max = 100;
+    private float min =  -100;
 
     private static List<String> yaws = new ArrayList<String>();
     private static List<String> pitches = new ArrayList<String>();
@@ -105,16 +105,16 @@ public class ApplicationActivity extends AppCompatActivity {
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
-            if (STATE == "down" && yaw-previous > 40 && running) {
+            if (STATE == "down" && yaw > max && running) {
                 count++;
                 mSocket.emit("msg", count + ":" + myo.getName());
                 myo.vibrate(Myo.VibrationType.LONG);
             }
 
-            if (yaw-previous > max) {
+            if (yaw > max) {
                 STATE = "up";
             }
-            else if (yaw-previous < min) {
+            else if (yaw < min) {
                 STATE = "down";
             }
 
@@ -124,7 +124,6 @@ public class ApplicationActivity extends AppCompatActivity {
                 pitch *= -1;
             }
 
-            previous = yaw;
             // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
 //            mTextView.setRotation(roll);
 //            mTextView.setRotationX(pitch);
@@ -261,7 +260,7 @@ public class ApplicationActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         return;
                     }
-                    Toast.makeText(getApplicationContext(), count + ":" + user, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), user + " has " + count + " push up(s)", Toast.LENGTH_LONG).show();
                 }
             });
         }
