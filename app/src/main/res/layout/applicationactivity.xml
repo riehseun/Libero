@@ -131,14 +131,42 @@
             tools:context="MainActivity"
             android:translationZ="2dp"
             android:clickable="true">
-
+            android:id="@+id/results">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
+                android:text="This is supposed to be a leaderboard"
                 android:id="@+id/resultview" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Your Score: "
+                android:id="@+id/yourResult" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Your Rank: "
+                android:id="@+id/yourRank" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="This is motiavtional"
+                android:id="@+id/motivation" />
+
+            <Button
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:text="New Game"
+                android:id= "@+id/home" />
+
         </FrameLayout>
 
     </ViewFlipper>
