@@ -96,6 +96,9 @@ public class ApplicationActivity extends Activity {
         // onPose() is called whenever a Myo provides a new pose.
         @Override
         public void onPose(Myo myo, long timestamp, Pose pose) {
+
+            myo.unlock(Myo.UnlockType.HOLD);
+
             // Handle the cases of the Pose enumeration, and change the text of the text view
             // based on the pose we receive.
             switch (pose) {
