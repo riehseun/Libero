@@ -6,7 +6,7 @@ Currently, the app can detect the number of push-ups, jumping jacks and bench pr
 
 
 
-![Libero](/app/src/main/res/drawable/libero.png?raw=true)
+![Libero](/app/src/main/res/drawable/libero2.png?raw=true)
 
 Front-end: Java, Android Studio, Myo Band SDK, with graphics drawn in Intaglio.
 Backend server was built using NodeJS  
