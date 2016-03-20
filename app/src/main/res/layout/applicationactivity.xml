@@ -212,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/you"
                 android:text="You completed: "
-                android:layout_alignBottom="@+id/win"
+                android:layout_alignBottom="@id/win"
                 android:layout_alignStart="@+id/motivation"
                 android:textSize="20dp" />
 
@@ -222,16 +222,16 @@
                 android:id="@+id/op"
                 android:text="Your opponent completed:"
                 android:textSize="20dp"
-                android:layout_marginTop="62dp"
-                android:layout_below="@+id/lose"
+                android:layout_marginTop="50dp"
+                android:layout_below="@id/lose"
                 android:layout_alignStart="@+id/motivation" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 Repetitions"
                 android:id="@+id/youRep"
-                android:layout_below="@+id/lose"
+                android:text= "0 Repetitions"
+                android:layout_below="@id/lose"
                 android:layout_centerHorizontal="true"
                 android:textSize="20dp" />
 
@@ -242,8 +242,8 @@
                 android:text="0 Repetitions"
                 android:id="@+id/opRep"
                 android:textSize="20dp"
-                android:layout_below="@+id/op"
-                android:layout_alignStart="@+id/youRep" />
+                android:layout_below="@id/op"
+                android:layout_alignStart="@id/youRep" />
 
 
         </RelativeLayout>

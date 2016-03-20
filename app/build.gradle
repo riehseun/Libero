@@ -23,6 +23,10 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     repositories {
         maven {
@@ -37,4 +41,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.github.nkzawa:socket.io-client:0.3.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
 }

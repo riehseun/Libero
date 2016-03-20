@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.facebook.FacebookSdk;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -32,6 +33,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class ApplicationActivity extends AppCompatActivity {
 
     private TextView minTimer;
@@ -39,9 +42,10 @@ public class ApplicationActivity extends AppCompatActivity {
     private TextView counterView;
     private ViewFlipper viewFlipper;
 
-    private String opponent;
+    private TextView opponent;
     private boolean running;
     private int count = 0;
+    private String opCount;
 
     private TextView youRep;
     private TextView opRep;
@@ -231,6 +235,9 @@ public class ApplicationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.applicationactivity);
 
+        //Initialize Facebook SDK
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("msg", onResponse);
@@ -284,7 +291,10 @@ public class ApplicationActivity extends AppCompatActivity {
                         return;
                     }
                     Toast.makeText(getApplicationContext(), user + " has " + count + " push up(s)", Toast.LENGTH_LONG).show();
-                    opponent = count;
+                    opponent=(TextView)findViewById(R.id.opRep);
+                    opponent.setText(count + " Repetitions");
+
+                    opCount = count;
                 }
             });
         }
@@ -342,16 +352,26 @@ public class ApplicationActivity extends AppCompatActivity {
 
     private void DisplayResults() {
 
-        int opCount = Integer.parseInt(opponent);
-        if (opCount < count)            win= (ImageView) findViewById(R.id.win);
-        else if (opCount == count)       tie= (ImageView) findViewById(R.id.tie);
-        else if (opCount > count)         lose= (ImageView) findViewById(R.id.lose);
+        if (opCount != null){
+            int opcount = Integer.parseInt(opCount);
+            if (opcount < count)            win= (ImageView) findViewById(R.id.win);
+            else if (opcount == count)       tie= (ImageView) findViewById(R.id.tie);
+            else if (opcount > count)         lose= (ImageView) findViewById(R.id.lose);
+
+            youRep= (TextView) findViewById(R.id.youRep);
+            //youRep = counterView;
+            youRep.setText(count + " Repetitions");
+
+            opRep= (TextView) findViewById(R.id.opRep);
+            //youRep = counterView;
+            opRep.setText(opcount + " Repetitions");
+        }
 
         youRep= (TextView) findViewById(R.id.youRep);
-        opRep= (TextView) findViewById(R.id.opRep);
-
+        //youRep = counterView;
         youRep.setText(count + " Repetitions");
-        opRep.setText(opCount + " Repetitions");
+
+
         //leaderboard();
     }
 
@@ -370,7 +390,7 @@ public class ApplicationActivity extends AppCompatActivity {
             }
             public void onFinish() {
                 minTimer.setText("Seconds remaining: ");
-                new CountDownTimer(60000, 1000) {
+                new CountDownTimer(10000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         minTimerSecs.setText(Long.toString(millisUntilFinished/1000));
                     }
@@ -378,6 +398,7 @@ public class ApplicationActivity extends AppCompatActivity {
                         minTimer.setText("Done!");
                         minTimerSecs.setText(null);
                         viewFlipper.showNext();
+                        DisplayResults();
                     }
 
                 }.start();
