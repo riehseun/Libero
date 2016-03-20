@@ -40,6 +40,7 @@ public class ApplicationActivity extends AppCompatActivity {
     private TextView minTimer;
     private TextView minTimerSecs;
     private TextView counterView;
+    private TextView opprogress;
     private ViewFlipper viewFlipper;
 
     private TextView opponent;
@@ -247,6 +248,7 @@ public class ApplicationActivity extends AppCompatActivity {
         counterView = (TextView) findViewById(R.id.progressview);
         minTimerSecs = (TextView) findViewById(R.id.minTimerSecs);
         counterView.setId(android.R.id.mask);
+        opprogress = (TextView) findViewById(R.id.opProgressview);
         // First, we initialize the Hub singleton with an application identifier.
         Hub hub = Hub.getInstance();
         if (!hub.init(this, getPackageName())) {
@@ -290,9 +292,9 @@ public class ApplicationActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         return;
                     }
-                    Toast.makeText(getApplicationContext(), user + " has " + count + " push up(s)", Toast.LENGTH_LONG).show();
-                    opponent=(TextView)findViewById(R.id.opRep);
-                    opponent.setText(count + " Repetitions");
+                    //Toast.makeText(getApplicationContext(), user + " has " + count + " push up(s)", Toast.LENGTH_LONG).show();
+                    opprogress=(TextView)findViewById(R.id.opProgressview);
+                    opprogress.setText(count + " Repetitions");
 
                     opCount = count;
                 }
@@ -354,16 +356,20 @@ public class ApplicationActivity extends AppCompatActivity {
 
         if (opCount != null){
             int opcount = Integer.parseInt(opCount);
-            if (opcount < count)            win= (ImageView) findViewById(R.id.win);
-            else if (opcount == count)       tie= (ImageView) findViewById(R.id.tie);
-            else if (opcount > count)         lose= (ImageView) findViewById(R.id.lose);
+            if (opcount < count)        win= (ImageView) findViewById(R.id.win);
+            else if (opcount == count) {
+                win = (ImageView) findViewById(R.id.tie);
+            }
+            else if (opcount > count)         win= (ImageView) findViewById(R.id.lose);
 
             youRep= (TextView) findViewById(R.id.youRep);
             //youRep = counterView;
+            final int finalCount = count;
             youRep.setText(count + " Repetitions");
 
             opRep= (TextView) findViewById(R.id.opRep);
             //youRep = counterView;
+            final int finalOpcount = opcount;
             opRep.setText(opcount + " Repetitions");
         }
 

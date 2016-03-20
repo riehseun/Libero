@@ -75,12 +75,48 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Number of Pushups:"
+                android:text="Your # of Pushups:"
                 android:id="@+id/textView"
                 android:layout_gravity="left|center_vertical"
                 android:textSize="25dp" />
+            <TextView
+                android:layout_width="301dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="60dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/progressview"
+                android:layout_gravity="left|center_vertical"
+                android:background="#d7eecf"
+                android:elegantTextHeight="true"
+                android:text="0"
+                android:textSize="25dp"
+                android:textColor="#e12e64"
+                android:gravity="center" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="120dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Opponents # of Pushups:"
+                android:id="@+id/textView2"
+                android:layout_gravity="left|center_vertical"
+                android:textSize="25dp" />
+
+            <TextView
+                android:layout_width="301dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="180dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/opProgressview"
+                android:layout_gravity="left|center_vertical"
+                android:background="#d7eecf"
+                android:elegantTextHeight="true"
+                android:text="0"
+                android:textSize="25dp"
+                android:textColor="#e12e64"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="326dp"
@@ -106,18 +142,7 @@
                     android:textColor="#ba68c8"
                     android:singleLine="false" />
             </LinearLayout>
-            <TextView
-                android:layout_width="301dp"
-                android:layout_height="174dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/progressview"
-                android:layout_gravity="left|bottom"
-                android:background="#d7eecf"
-                android:elegantTextHeight="true"
-                android:text="0"
-                android:textSize="50dp"
-                android:textColor="#e12e64"
-                android:gravity="center" />
+
         </FrameLayout>
 
 
