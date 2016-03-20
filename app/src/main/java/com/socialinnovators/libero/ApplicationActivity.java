@@ -133,10 +133,6 @@ public class ApplicationActivity extends AppCompatActivity {
                     break;
                 case FIST:
 
-                    System.out.println(yaws);
-                    System.out.println(rolls);
-                    System.out.println(pitches);
-                    System.out.println(count);
                     running = false;
                     break;
                 case WAVE_IN:
@@ -146,11 +142,6 @@ public class ApplicationActivity extends AppCompatActivity {
 
                     break;
                 case FINGERS_SPREAD:
-                    if(viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(findViewById(R.id.instruction))) {
-                        running = true;
-                        viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.timer)));
-                        countdown();
-                    }
                     break;
             }
 
@@ -179,10 +170,10 @@ public class ApplicationActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("msg", onResponse);
         mSocket.connect();
-
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
         counterView = (TextView) findViewById(R.id.progressview);
         minTimerSecs = (TextView) findViewById(R.id.minTimerSecs);
+        counterView.setId(android.R.id.mask);
         // First, we initialize the Hub singleton with an application identifier.
         Hub hub = Hub.getInstance();
         if (!hub.init(this, getPackageName())) {
@@ -278,6 +269,8 @@ public class ApplicationActivity extends AppCompatActivity {
 
     public void GetStarted(View view) {
         viewFlipper.showNext();
+        countdown();
+        running = true;
 
     }
 
@@ -293,7 +286,7 @@ public class ApplicationActivity extends AppCompatActivity {
     }
 
     public void GoHome(View view) {
-        viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.start)));
+      //  viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.start)));
 
     }
 

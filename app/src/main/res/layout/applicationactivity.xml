@@ -31,58 +31,41 @@
 
 
             <Button
-                android:layout_width="161dp"
-                android:layout_height="64dp"
-                android:text="Get Started"
+                android:layout_width="222dp"
+                android:layout_height="97dp"
+                android:text="Start the Challenge"
                 android:id="@+id/action_scan"
                 android:layout_gravity="center_horizontal|bottom"
-                android:elevation="6dp"
+                android:elevation="10dp"
                 android:onClick="GetStarted"
                 style="@style/MyButton"
                 android:background="#48db77"
                 android:elegantTextHeight="true"
                 android:translationZ="6dp"
-                android:textColor="#fcfffd" />
+                android:textColor="#fcfffd"
+                android:typeface="serif"
+                android:shadowColor="#bdbdbd" />
 
             <ImageView
-                android:layout_width="320dp"
-                android:layout_height="320dp"
+                android:layout_width="match_parent"
+                android:layout_height="401dp"
                 android:id="@+id/imageView"
                 android:paddingTop="32dp"
                 android:paddingRight="32dp"
                 android:src="@drawable/logo" />
 
-
-        </FrameLayout>
-
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="MainActivity"
-            android:translationZ="2dp"
-            android:clickable="true"
-            android:id="@+id/instruction">
-
-
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Open hand wide to indicate that you are ready"
-                android:id="@+id/instructionview" />
+                android:text="First, press Scan to sync your Myo Band"
+                android:id="@+id/instructionview"
+                android:layout_gravity="center_horizontal|top"
+                android:textSize="15dp"
+                android:textStyle="italic" />
 
-            <ImageView
-                android:layout_width="251dp"
-                android:layout_height="251dp"
-                android:id="@+id/imageView2"
-                android:layout_gravity="center"
-                android:src="@drawable/hand" />
+
         </FrameLayout>
 
 
