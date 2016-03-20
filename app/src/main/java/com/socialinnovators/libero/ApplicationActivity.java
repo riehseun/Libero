@@ -353,14 +353,21 @@ public class ApplicationActivity extends AppCompatActivity {
     }
 
     private void DisplayResults() {
-
+        ImageView result;
         if (opCount != null){
             int opcount = Integer.parseInt(opCount);
-            if (opcount < count)        win= (ImageView) findViewById(R.id.win);
-            else if (opcount == count) {
-                win = (ImageView) findViewById(R.id.tie);
+            if (opcount < count)  {
+                result = (ImageView) findViewById(R.id.win);
+                result.setImageResource(R.drawable.win);
             }
-            else if (opcount > count)         win= (ImageView) findViewById(R.id.lose);
+            else if (opcount == count) {
+                result = (ImageView) findViewById(R.id.tie);
+                result.setImageResource(R.drawable.tie);
+            }
+            else if (opcount > count) {
+                result = (ImageView) findViewById(R.id.lose);
+                result.setImageResource(R.drawable.lose);
+            }
 
             youRep= (TextView) findViewById(R.id.youRep);
             //youRep = counterView;
@@ -383,6 +390,7 @@ public class ApplicationActivity extends AppCompatActivity {
 
 
     public void GoHome(View view) {
+        opCount = "0";
         viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.start)));
 
     }
