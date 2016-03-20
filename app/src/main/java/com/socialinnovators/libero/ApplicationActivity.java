@@ -1,11 +1,9 @@
 package com.socialinnovators.libero;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,23 +16,17 @@ import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 import com.thalmic.myo.AbstractDeviceListener;
-import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.Quaternion;
-import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ApplicationActivity extends AppCompatActivity {
 
@@ -47,14 +39,18 @@ public class ApplicationActivity extends AppCompatActivity {
     private String opponent;
 
     private int count = 0;
+    private int pushUpState=0;
     private boolean running = false;
     private String STATE;
-    private final float max = 100;
-    private final float min =  -100;
+    private float max = 100;
+    private float min =  -100;
+    private float previous;
 
-    private static List<String> yaws = new ArrayList<>();
-    private static List<String> pitches = new ArrayList<>();
-    private static List<String> rolls = new ArrayList<>();
+    private float[] startPosition = new float[3];
+    private float[] currentPosition = new float[3];
+//    private static List<String> yaws = new ArrayList<>();
+//    private static List<String> pitches = new ArrayList<>();
+//    private static List<String> rolls = new ArrayList<>();
 
     private Socket mSocket;
     {
@@ -78,36 +74,72 @@ public class ApplicationActivity extends AppCompatActivity {
             float roll = (float) Math.toDegrees(Quaternion.roll(rotation));
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
+            //float sum = yaw+pitch+roll;
+            float pitchDiff, rollDiff;
+            float[] currentPosition  = {pitch, yaw, roll};
 
-            if (STATE == "down" && yaw > max && running) {
-                count++;
-                mSocket.emit("msg", count + ":" + myo.getName());
-                myo.vibrate(Myo.VibrationType.LONG);
+
+            if (pushUpState == 0) {
+                pitchDiff = currentPosition[0] - startPosition[0];
+                if (pitchDiff > 0) { // pitch difference threshold
+                    rollDiff = currentPosition[2] - startPosition[2];
+                    if (rollDiff < -10) { // roll difference threshold
+                        pushUpState = 1; // change state to 1
+                        startPosition = currentPosition;
+
+                    }
+                }
+            } else if (pushUpState == 1) {
+                pitchDiff = currentPosition[0] - startPosition[0];
+                System.out.println(pitchDiff);
+                if (pitchDiff < 0) { // pitch difference threshold
+                    rollDiff = currentPosition[2] - startPosition[2];
+                    if (rollDiff > 10) { // roll difference threshold
+                        pushUpState = 0; // change state to 0
+                        count += 1;
+                        mSocket.emit("msg", count + ":" + myo.getName());
+                        startPosition = currentPosition;
+                        counterView.setText(Integer.toString(count));
+                    }
+                }
             }
 
-            if (yaw > max) {
-                STATE = "up";
-            }
-            else if (yaw < min) {
-                STATE = "down";
-            }
 
-            // Adjust roll and pitch for the orientation of the Myo on the arm.
-            if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
-                roll *= -1;
-                pitch *= -1;
-            }
+
+
+
+//            if (STATE == "down" && sum-previous > max && running) {
+//                count++;
+//                mSocket.emit("msg", count + ":" + myo.getName());
+//                myo.vibrate(Myo.VibrationType.LONG);
+//            }
+//
+//
+//            if (sum-previous > max) {
+//                STATE = "up";
+//            }
+//            else if (sum-previous < min) {
+//                STATE = "down";
+//            }
+//
+//            previous = sum;
+//
+//            // Adjust roll and pitch for the orientation of the Myo on the arm.
+//            if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
+//                roll *= -1;
+//                pitch *= -1;
+//            }
+
+
 
 
             // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
 //            mTextView.setRotation(roll);
 //            mTextView.setRotationX(pitch);
 //            mTextView.setRotationY(yaw);
-            counterView.setText(Integer.toString(count));
 
-            yaws.add(Float.toString(yaw));
-            pitches.add(Float.toString(pitch));
-            rolls.add(Float.toString(roll));
+            //Log.d("sum", Float.toString(sum - previous) );
+
         }
 
         // onPose() is called whenever a Myo provides a new pose.
