@@ -34,13 +34,14 @@ import java.util.List;
 
 public class ApplicationActivity extends AppCompatActivity {
 
-    private TextView mTextView;
     private TextView minTimer;
     private TextView minTimerSecs;
     private TextView counterView;
     private ViewFlipper viewFlipper;
 
     private String opponent;
+    private boolean running;
+    private int count = 0;
 
     private TextView youRep;
     private TextView opRep;
@@ -49,11 +50,17 @@ public class ApplicationActivity extends AppCompatActivity {
     private ImageView lose;
     private ImageView tie;
 
-    private int count = 0;
-    private boolean running = false;
-    private String STATE;
-    private final float max = 100;
-    private final float min =  -100;
+    // Roll Parameter
+    private float rollLocalMax;
+    private float rollLocalMin;
+    private final float lowRange = 70.0f;
+    private float prevRoll;
+    private String prevRollState;
+    private String currentRollState;
+
+    // Y Paramater
+    private float prevY;
+    private final float yLimit = 0.05f;
 
     private static List<String> yaws = new ArrayList<>();
     private static List<String> pitches = new ArrayList<>();
@@ -71,7 +78,32 @@ public class ApplicationActivity extends AppCompatActivity {
     // Classes that inherit from AbstractDeviceListener can be used to receive events from Myo devices.
     // If you do not override an event, the default behavior is to do nothing.
     private DeviceListener mListener = new AbstractDeviceListener() {
+        /*
+        @Override
+        public void onAccelerometerData (Myo myo, long timestamp, Vector3 accelerometer) {
+            float x = (float)accelerometer.x();
+            float y = (float)accelerometer.y();
+            float z = (float)accelerometer.z();
 
+            System.out.println(running);
+
+            if (y < 0 && prevY > 0) {
+
+            }
+            if (y > 0 && prevY < 0 && Math.abs(y) > yLimit) {
+                mSocket.emit("msg", count + ":" + myo.getName());
+                myo.vibrate(Myo.VibrationType.LONG);
+                count++;
+            }
+            prevY = y;
+
+            counterView.setText(Integer.toString(count));
+
+            xs.add(Float.toString(x));
+            ys.add(Float.toString(y));
+            zs.add(Float.toString(z));
+        }
+        */
 
         // onOrientationData() is called whenever a Myo provides its current orientation,
         // represented as a quaternion.
@@ -82,18 +114,32 @@ public class ApplicationActivity extends AppCompatActivity {
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
 
-            if (STATE == "down" && yaw > max && running) {
-                count++;
-                mSocket.emit("msg", count + ":" + myo.getName());
-                myo.vibrate(Myo.VibrationType.LONG);
+            // Calculate increasing/decreasing for Roll and Yaw
+            if (roll > prevRoll) {
+                currentRollState = "roll increasing";
+            }
+            if (roll < prevRoll) {
+                currentRollState = "roll decreasing";
             }
 
-            if (yaw > max) {
-                STATE = "up";
+            // Calculate local min/max for Roll and Yaw
+            if (currentRollState == "roll increasing" && prevRollState == "roll decreasing") {
+                rollLocalMin = roll;
+                //System.out.println("Local Min/Max Diff: " + Math.abs(rollLocalMin-rollLocalMax));
+                //System.out.println(yAccel);
+                if (Math.abs(rollLocalMin-rollLocalMax) > lowRange && running == true) {
+                    mSocket.emit("msg", count + ":" + myo.getName());
+                    myo.vibrate(Myo.VibrationType.LONG);
+                    count++;
+                }
             }
-            else if (yaw < min) {
-                STATE = "down";
+            if (currentRollState == "roll decreasing" && prevRollState == "roll increasing") {
+                rollLocalMax = roll;
             }
+
+            // Set states for Roll and Yaw
+            prevRoll = roll;
+            prevRollState = currentRollState;
 
             // Adjust roll and pitch for the orientation of the Myo on the arm.
             if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
@@ -101,11 +147,6 @@ public class ApplicationActivity extends AppCompatActivity {
                 pitch *= -1;
             }
 
-
-            // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
-//            mTextView.setRotation(roll);
-//            mTextView.setRotationX(pitch);
-//            mTextView.setRotationY(yaw);
             counterView.setText(Integer.toString(count));
 
             yaws.add(Float.toString(yaw));
@@ -135,6 +176,29 @@ public class ApplicationActivity extends AppCompatActivity {
 
                     break;
                 case FIST:
+                    /*
+                    for (String a : yaws) {
+                        System.out.println("yaw: " + a);
+                    }
+                    for (String b : pitches) {
+                        System.out.println("pitch: " + b);
+                    }
+                    */
+                    for (String c: rolls) {
+                        System.out.println("roll: " + c);
+                    }
+                    /*
+                    for (String x : xs) {
+                        System.out.println("x: " + x);
+                    }
+                    for (String y : ys) {
+                        System.out.println("y: " + y);
+                    }
+                    for (String z : zs) {
+                        System.out.println("z: " + z);
+                    }
+                    System.out.println(count);
+                    */
                     break;
                 case WAVE_IN:
 
@@ -289,7 +353,6 @@ public class ApplicationActivity extends AppCompatActivity {
         youRep.setText(count + " Repetitions");
         opRep.setText(opCount + " Repetitions");
         //leaderboard();
-
     }
 
 
