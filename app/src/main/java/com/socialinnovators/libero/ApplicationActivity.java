@@ -83,7 +83,7 @@ public class ApplicationActivity extends AppCompatActivity {
                 pitchDiff = currentPosition[0] - startPosition[0];
                 if (pitchDiff > 0) { // pitch difference threshold
                     rollDiff = currentPosition[2] - startPosition[2];
-                    if (rollDiff < -10) { // roll difference threshold
+                    if (rollDiff < -1.1) { // roll difference threshold
                         pushUpState = 1; // change state to 1
                         startPosition = currentPosition;
 
@@ -94,7 +94,7 @@ public class ApplicationActivity extends AppCompatActivity {
                 System.out.println(pitchDiff);
                 if (pitchDiff < 0) { // pitch difference threshold
                     rollDiff = currentPosition[2] - startPosition[2];
-                    if (rollDiff > 10) { // roll difference threshold
+                    if (rollDiff > 1.1) { // roll difference threshold
                         pushUpState = 0; // change state to 0
                         count += 1;
                         mSocket.emit("msg", count + ":" + myo.getName());
