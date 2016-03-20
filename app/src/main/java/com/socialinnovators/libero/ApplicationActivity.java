@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -21,12 +22,15 @@ import com.thalmic.myo.Hub;
 import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.Quaternion;
+import com.thalmic.myo.XDirection;
 import com.thalmic.myo.scanner.ScanActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationActivity extends AppCompatActivity {
 
@@ -38,19 +42,22 @@ public class ApplicationActivity extends AppCompatActivity {
 
     private String opponent;
 
+    private TextView youRep;
+    private TextView opRep;
+
+    private ImageView win;
+    private ImageView lose;
+    private ImageView tie;
+
     private int count = 0;
-    private int pushUpState=0;
     private boolean running = false;
     private String STATE;
-    private float max = 100;
-    private float min =  -100;
-    private float previous;
+    private final float max = 100;
+    private final float min =  -100;
 
-    private float[] startPosition = new float[3];
-    private float[] currentPosition = new float[3];
-//    private static List<String> yaws = new ArrayList<>();
-//    private static List<String> pitches = new ArrayList<>();
-//    private static List<String> rolls = new ArrayList<>();
+    private static List<String> yaws = new ArrayList<>();
+    private static List<String> pitches = new ArrayList<>();
+    private static List<String> rolls = new ArrayList<>();
 
     private Socket mSocket;
     {
@@ -74,72 +81,36 @@ public class ApplicationActivity extends AppCompatActivity {
             float roll = (float) Math.toDegrees(Quaternion.roll(rotation));
             float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
             float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
-            //float sum = yaw+pitch+roll;
-            float pitchDiff, rollDiff;
-            float[] currentPosition  = {pitch, yaw, roll};
 
-
-            if (pushUpState == 0) {
-                pitchDiff = currentPosition[0] - startPosition[0];
-                if (pitchDiff > 0) { // pitch difference threshold
-                    rollDiff = currentPosition[2] - startPosition[2];
-                    if (rollDiff < -1.1) { // roll difference threshold
-                        pushUpState = 1; // change state to 1
-                        startPosition = currentPosition;
-
-                    }
-                }
-            } else if (pushUpState == 1) {
-                pitchDiff = currentPosition[0] - startPosition[0];
-                System.out.println(pitchDiff);
-                if (pitchDiff < 0) { // pitch difference threshold
-                    rollDiff = currentPosition[2] - startPosition[2];
-                    if (rollDiff > 1.1) { // roll difference threshold
-                        pushUpState = 0; // change state to 0
-                        count += 1;
-                        mSocket.emit("msg", count + ":" + myo.getName());
-                        startPosition = currentPosition;
-                        counterView.setText(Integer.toString(count));
-                    }
-                }
+            if (STATE == "down" && yaw > max && running) {
+                count++;
+                mSocket.emit("msg", count + ":" + myo.getName());
+                myo.vibrate(Myo.VibrationType.LONG);
             }
 
+            if (yaw > max) {
+                STATE = "up";
+            }
+            else if (yaw < min) {
+                STATE = "down";
+            }
 
-
-
-
-//            if (STATE == "down" && sum-previous > max && running) {
-//                count++;
-//                mSocket.emit("msg", count + ":" + myo.getName());
-//                myo.vibrate(Myo.VibrationType.LONG);
-//            }
-//
-//
-//            if (sum-previous > max) {
-//                STATE = "up";
-//            }
-//            else if (sum-previous < min) {
-//                STATE = "down";
-//            }
-//
-//            previous = sum;
-//
-//            // Adjust roll and pitch for the orientation of the Myo on the arm.
-//            if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
-//                roll *= -1;
-//                pitch *= -1;
-//            }
-
-
+            // Adjust roll and pitch for the orientation of the Myo on the arm.
+            if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
+                roll *= -1;
+                pitch *= -1;
+            }
 
 
             // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
 //            mTextView.setRotation(roll);
 //            mTextView.setRotationX(pitch);
 //            mTextView.setRotationY(yaw);
+            counterView.setText(Integer.toString(count));
 
-            //Log.d("sum", Float.toString(sum - previous) );
-
+            yaws.add(Float.toString(yaw));
+            pitches.add(Float.toString(pitch));
+            rolls.add(Float.toString(roll));
         }
 
         // onPose() is called whenever a Myo provides a new pose.
@@ -164,8 +135,6 @@ public class ApplicationActivity extends AppCompatActivity {
 
                     break;
                 case FIST:
-
-                    running = false;
                     break;
                 case WAVE_IN:
 
@@ -202,6 +171,7 @@ public class ApplicationActivity extends AppCompatActivity {
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("msg", onResponse);
         mSocket.connect();
+
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
         counterView = (TextView) findViewById(R.id.progressview);
         minTimerSecs = (TextView) findViewById(R.id.minTimerSecs);
@@ -307,33 +277,38 @@ public class ApplicationActivity extends AppCompatActivity {
     }
 
     private void DisplayResults() {
-        // TODO: Display tabulated results from server
-        // TODO: Call items to add to listView
-        // Display score, rank, motivational quote
 
-        if (opponent.equals("")) {
+        int opCount = Integer.parseInt(opponent);
+        if (opCount < count)            win= (ImageView) findViewById(R.id.win);
+        else if (opCount == count)       tie= (ImageView) findViewById(R.id.tie);
+        else if (opCount > count)         lose= (ImageView) findViewById(R.id.lose);
 
-        }
+        youRep= (TextView) findViewById(R.id.youRep);
+        opRep= (TextView) findViewById(R.id.opRep);
+
+        youRep.setText(count + " Repetitions");
+        opRep.setText(opCount + " Repetitions");
+        //leaderboard();
 
     }
 
+
     public void GoHome(View view) {
-      //  viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.start)));
+        viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.start)));
 
     }
 
     private void countdown() {
         minTimer=(TextView)findViewById(R.id.minTimer);
 
-        new CountDownTimer(3000, 1000) {
+        new CountDownTimer(4000, 1000) {
             public void onTick(long millUntilFinished) {
                 minTimer.setText("Begin in: " + (millUntilFinished / 1000));
             }
             public void onFinish() {
+                minTimer.setText("Seconds remaining: ");
                 new CountDownTimer(60000, 1000) {
                     public void onTick(long millisUntilFinished) {
-                        minTimer.setTextSize(20);
-                        minTimer.setText("Seconds remaining: ");
                         minTimerSecs.setText(Long.toString(millisUntilFinished/1000));
                     }
                     public void onFinish() {

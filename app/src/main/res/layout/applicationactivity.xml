@@ -9,7 +9,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.socialinnovators.libero.ApplicationActivity"
     android:translationZ="2dp"
-    android:clickable="true">
+    android:clickable="true"
+    android:elevation="5dp">
 
     <ViewFlipper
         android:layout_width="347dp"
@@ -27,43 +28,33 @@
             android:paddingTop="@dimen/activity_vertical_margin"
             tools:context="MainActivity"
             android:translationZ="2dp"
-            android:clickable="true">
+            android:clickable="true"
+            android:id="@+id/start">
 
 
             <Button
-                android:layout_width="222dp"
-                android:layout_height="97dp"
+                android:layout_width="240dp"
+                android:layout_height="94dp"
                 android:text="Start the Challenge"
                 android:id="@+id/action_scan"
                 android:layout_gravity="center_horizontal|bottom"
-                android:elevation="10dp"
+                android:elevation="6dp"
                 android:onClick="GetStarted"
                 style="@style/MyButton"
                 android:background="#48db77"
                 android:elegantTextHeight="true"
                 android:translationZ="6dp"
                 android:textColor="#fcfffd"
-                android:typeface="serif"
-                android:shadowColor="#bdbdbd" />
+                android:shadowColor="#d7ccc8" />
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="401dp"
+                android:layout_width="337dp"
+                android:layout_height="344dp"
                 android:id="@+id/imageView"
                 android:paddingTop="32dp"
                 android:paddingRight="32dp"
-                android:src="@drawable/logo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="First, press Scan to sync your Myo Band"
-                android:id="@+id/instructionview"
-                android:layout_gravity="center_horizontal|top"
-                android:textSize="15dp"
-                android:textStyle="italic" />
+                android:src="@drawable/logo"
+                android:layout_gravity="center_horizontal|top" />
 
 
         </FrameLayout>
@@ -99,19 +90,6 @@
                 android:id="@+id/minTimer"
                 android:layout_gravity="left|top"
                 android:textSize="25dp" />
-
-            <TextView
-                android:layout_width="301dp"
-                android:layout_height="174dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/progressview"
-                android:layout_gravity="left|bottom"
-                android:background="#d7eecf"
-                android:elegantTextHeight="true"
-                android:textSize="50dp"
-                android:textColor="#e12e64"
-                android:gravity="center" />
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -128,56 +106,147 @@
                     android:textColor="#ba68c8"
                     android:singleLine="false" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="301dp"
+                android:layout_height="174dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/progressview"
+                android:layout_gravity="left|bottom"
+                android:background="#d7eecf"
+                android:elegantTextHeight="true"
+                android:text="0"
+                android:textSize="50dp"
+                android:textColor="#e12e64"
+                android:gravity="center" />
         </FrameLayout>
-        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            tools:context="MainActivity"
-            android:translationZ="2dp"
-            android:clickable="true">
-            android:id="@+id/results">
+            android:id="@+id/winLose" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:src = "@drawable/lose"
+                android:layout_height="wrap_content"
+                android:id="@+id/lose"
+                android:layout_alignParentStart="false"
+                android:maxWidth="600dp"
+                android:maxHeight="300dp"
+                android:minHeight="200dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentEnd="false"
+                android:layout_marginTop="-50dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src = "@drawable/tie"
+                android:id="@+id/tie"
+                android:layout_alignParentStart="false"
+                android:maxWidth="600dp"
+                android:maxHeight="200dp"
+                android:minHeight="100dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentEnd="false"
+                android:layout_marginTop="-50dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src = "@drawable/win"
+                android:id="@+id/win"
+                android:layout_alignParentStart="false"
+                android:maxWidth="600dp"
+                android:maxHeight="300dp"
+                android:minHeight="200dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentEnd="false"
+                android:layout_marginTop="-50dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="This is supposed to be a leaderboard"
-                android:id="@+id/resultview" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Fit is not a destination but a way of life."
+                android:id="@+id/motivation"
+                android:textSize="18dp"
+                android:layout_above="@+id/mot"
+                android:layout_centerHorizontal="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Your Score: "
-                android:id="@+id/yourResult" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Your Rank: "
-                android:id="@+id/yourRank" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="This is motiavtional"
-                android:id="@+id/motivation" />
 
             <Button
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:text="New Game"
-                android:id= "@+id/home" />
+                android:layout_width="161dp"
+                android:layout_height="64dp"
+                android:text="Play Again"
+                android:id="@+id/go"
+                android:layout_gravity="center_horizontal|bottom"
+                android:elevation="6dp"
+                android:onClick="GoHome"
+                style="@style/MyButton"
+                android:background="#9b49dd78"
+                android:elegantTextHeight="true"
+                android:translationZ="6dp"
+                android:textColor="#000000"
+                android:outlineProvider="background"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="65dp"
+                android:textSize="20dp" />
 
-        </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Let's make that life more fun!"
+                android:id="@+id/mot"
+                android:layout_above="@id/go"
+                android:layout_centerHorizontal="true" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/you"
+                android:text="You completed: "
+                android:layout_alignBottom="@+id/win"
+                android:layout_alignStart="@+id/motivation"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/op"
+                android:text="Your opponent completed:"
+                android:textSize="20dp"
+                android:layout_marginTop="62dp"
+                android:layout_below="@+id/lose"
+                android:layout_alignStart="@+id/motivation" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Repetitions"
+                android:id="@+id/youRep"
+                android:layout_below="@+id/lose"
+                android:layout_centerHorizontal="true"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="0 Repetitions"
+                android:id="@+id/opRep"
+                android:textSize="20dp"
+                android:layout_below="@+id/op"
+                android:layout_alignStart="@+id/youRep" />
+
+
+        </RelativeLayout>
 
     </ViewFlipper>
 
