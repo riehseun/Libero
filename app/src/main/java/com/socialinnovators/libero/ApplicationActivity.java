@@ -44,6 +44,8 @@ public class ApplicationActivity extends AppCompatActivity {
     private TextView counterView;
     private ViewFlipper viewFlipper;
 
+    private String opponent;
+
     private int count = 0;
     private boolean running = false;
     private String STATE;
@@ -225,6 +227,7 @@ public class ApplicationActivity extends AppCompatActivity {
                         return;
                     }
                     Toast.makeText(getApplicationContext(), user + " has " + count + " push up(s)", Toast.LENGTH_LONG).show();
+                    opponent = count;
                 }
             });
         }
@@ -273,24 +276,48 @@ public class ApplicationActivity extends AppCompatActivity {
     }
 
 
-
     public void GetStarted(View view) {
         viewFlipper.showNext();
+
+    }
+
+    private void DisplayResults() {
+        // TODO: Display tabulated results from server
+        // TODO: Call items to add to listView
+        // Display score, rank, motivational quote
+
+        if (opponent.equals("")) {
+
+        }
+
+    }
+
+    public void GoHome(View view) {
+        viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.start)));
 
     }
 
     private void countdown() {
         minTimer=(TextView)findViewById(R.id.minTimer);
 
-        new CountDownTimer(60000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                minTimer.setText("Seconds remaining: ");
-                minTimerSecs.setText(Long.toString(millisUntilFinished/1000));
+        new CountDownTimer(3000, 1000) {
+            public void onTick(long millUntilFinished) {
+                minTimer.setText("Begin in: " + (millUntilFinished / 1000));
             }
             public void onFinish() {
-                minTimer.setText("Done!");
-                minTimerSecs.setText(null);
-                viewFlipper.showNext();
+                new CountDownTimer(60000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        minTimer.setTextSize(20);
+                        minTimer.setText("Seconds remaining: ");
+                        minTimerSecs.setText(Long.toString(millisUntilFinished/1000));
+                    }
+                    public void onFinish() {
+                        minTimer.setText("Done!");
+                        minTimerSecs.setText(null);
+                        viewFlipper.showNext();
+                    }
+
+                }.start();
             }
 
         }.start();
