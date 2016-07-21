@@ -11,4 +11,4 @@ Front-end: Java, Android Studio, Myo Band SDK, with graphics drawn in Intaglio.
 Backend server was built using NodeJS  
 
 <em>Team social-innovators - Wearhacks KW 2016</em>  
-.
+
